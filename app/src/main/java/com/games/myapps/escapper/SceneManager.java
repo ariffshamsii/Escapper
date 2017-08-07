@@ -1,5 +1,8 @@
 package com.games.myapps.escapper;
 
+import android.graphics.Canvas;
+import android.view.MotionEvent;
+
 import java.util.ArrayList;
 
 /**
@@ -9,10 +12,27 @@ import java.util.ArrayList;
 public class SceneManager {
 
     private ArrayList<IScene>scenes = new ArrayList<>();
-    private int activeScene;
+    public static int ACTIVE_SCENE;
 
     public SceneManager()
     {
-        activeScene = 0;
+        ACTIVE_SCENE = 0;
+        scenes.add(new GameplayScene());
     }
+
+    public void recieveTouch(MotionEvent event)
+    {
+        scenes.get(ACTIVE_SCENE).recieveTouch(event);
+    }
+
+    public void update()
+    {
+        scenes.get(ACTIVE_SCENE).update();
+    }
+
+    public void draw(Canvas canvas)
+    {
+        scenes.get(ACTIVE_SCENE).draw(canvas);
+    }
+
 }

@@ -17,34 +17,29 @@ import android.view.SurfaceView;
 public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
 
     private MainThread thread;
-    private RectPlayer player;
+    /*private RectPlayer player;
     private Point playerPoint;
     private ObstacleManager obstacleManager;
     private boolean gameOver = false;
     private boolean movingPlayer = false;
     private long gameOverTime;
-    private Rect r = new Rect();
+    private Rect r = new Rect();*/
+
+    SceneManager manager;
 
     public GamePanel(Context context)
     {
         super(context);
         getHolder().addCallback(this);
+        Constants.CURRENT_CONTEXT = context;
         thread = new MainThread(getHolder(), this);
-        player = new RectPlayer(new Rect(100,100,200,200), Color.rgb(255,0,0));
+        /*player = new RectPlayer(new Rect(100,100,200,200), Color.rgb(255,0,0));
         playerPoint = new Point(Constants.SCREEN_WIDTH/2,3*Constants.SCREEN_HEIGHT/4);
         player.update(playerPoint);
-        obstacleManager = new ObstacleManager(200,350,75,Color.BLACK);
+        obstacleManager = new ObstacleManager(200,350,75,Color.BLACK);*/
+        manager = new SceneManager();
         setFocusable(true);
     }
-
-    public void reset()
-    {
-        playerPoint = new Point(Constants.SCREEN_WIDTH/2, 3*Constants.SCREEN_HEIGHT/4);
-        player.update(playerPoint);
-        obstacleManager = new ObstacleManager(200,350,75, Color.BLACK);
-        movingPlayer = false;
-    }
-
 
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
@@ -78,7 +73,8 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
-        switch (event.getAction())
+        manager.recieveTouch(event);
+       /* switch (event.getAction())
         {
             case MotionEvent.ACTION_DOWN:
                 if(!gameOver && player.getRectangle().contains((int)event.getX(), (int)event.getY()))
@@ -97,14 +93,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             case MotionEvent.ACTION_UP:
                 movingPlayer = false;
                 break;
-        }
+        }*/
         return true;
         //return super.onTouchEvent(event);
     }
 
     public void update()
     {
-        if(!gameOver) {
+        manager.update();
+        /*if(!gameOver) {
             player.update(playerPoint);
             obstacleManager.update();
 
@@ -112,14 +109,15 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
                 gameOver = true;
                 gameOverTime = System.currentTimeMillis();
             }
-        }
+        }*/
     }
 
     @Override
     public void draw(Canvas canvas)
     {
         super.draw(canvas);
-        canvas.drawColor(Color.WHITE);
+        manager.draw(canvas);
+        /*canvas.drawColor(Color.WHITE);
         player.draw(canvas);
         obstacleManager.draw(canvas);
 
@@ -129,19 +127,7 @@ public class GamePanel extends SurfaceView implements SurfaceHolder.Callback {
             paint.setTextSize(100);
             paint.setColor(Color.RED);
             drawCentreText(canvas, paint, "Game Over");
-        }
-    }
-
-    public void drawCentreText(Canvas canvas, Paint paint, String text)
-    {
-        paint.setTextAlign(Paint.Align.LEFT);
-        canvas.getClipBounds(r);
-        int cHeight = r.height();
-        int cWidth = r.width();
-        paint.getTextBounds(text, 0, text.length(), r);
-        float x = cWidth/2f - r.width()/2f - r.left;
-        float y = cHeight/2f - r.height()/2f - r.bottom;
-        canvas.drawText(text, x,y,paint);
+        }*/
     }
 
 }
